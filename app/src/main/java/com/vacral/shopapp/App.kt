@@ -2,13 +2,26 @@ package com.vacral.shopapp
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
+import com.vacral.shopapp.data.di.dataModule
+import com.vacral.shopapp.domain.di.domainModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        startKoin { //TODO делай да }
+        startKoin {
+            androidLogger(Level.DEBUG)
+            androidContext(this@App)
+
+            modules(
+                dataModule,
+                domainModule
+            )
+
+        }
         }
     }
-}
