@@ -1,9 +1,9 @@
 package com.vacral.shopapp
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatActivity
 import com.vacral.shopapp.data.di.dataModule
 import com.vacral.shopapp.domain.di.domainModule
+import com.vacral.shopapp.ui.di.uiModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -19,9 +19,10 @@ class App : Application() {
 
             modules(
                 dataModule,
-                domainModule
+                domainModule,
+                uiModule
             )
 
         }
-        }
     }
+}

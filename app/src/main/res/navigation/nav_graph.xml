@@ -9,5 +9,19 @@
         android:id="@+id/productListFragment"
         android:name="com.vacral.shopapp.ui.fragments.product.ProductListFragment"
         android:label="fragment_list"
-        tools:layout="@layout/fragment_list" />
+        tools:layout="@layout/fragment_list" >
+        <action
+            android:id="@+id/action_productListFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.vacral.shopapp.ui.fragments.product.detail.ProductDetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="productDetailId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 </navigation>

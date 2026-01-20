@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
     id("org.jetbrains.kotlin.plugin.serialization") version "2.2.21"
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -41,6 +42,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 
 }
 
