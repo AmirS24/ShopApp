@@ -14,7 +14,6 @@ class ProductDetailFragment : BaseFragment<FragmentDetailBinding, DetailViewMode
     FragmentDetailBinding::inflate
 ) {
 
-
     val args: ProductDetailFragmentArgs by navArgs()
 
      override val viewModel: DetailViewModel by viewModel()

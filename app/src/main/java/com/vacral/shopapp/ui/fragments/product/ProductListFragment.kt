@@ -12,84 +12,51 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.vacral.shopapp.databinding.FragmentDetailBinding
+import com.vacral.shopapp.databinding.FragmentDetailBinding.inflate
 import com.vacral.shopapp.databinding.FragmentListBinding
 import com.vacral.shopapp.ui.adapters.ProductAdapter
+import com.vacral.shopapp.ui.base.BaseFragment
+import com.vacral.shopapp.ui.fragments.product.detail.DetailViewModel
 import com.vacral.shopapp.ui.models.UiState
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ProductListFragment : Fragment() {
+class ProductListFragment : BaseFragment<FragmentListBinding, ListViewModel>(
+    FragmentListBinding::inflate
+) {
 
-    private var _binding: FragmentListBinding? = null
-    private val binding get() = _binding!!
-
-    private val listViewModel: ListViewModel by viewModel()
+    override val viewModel : ListViewModel by viewModel()
 
     private val adapter = ProductAdapter { product ->
-
-        val action =
-            ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment()
+        val action = ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment()
                 .setProductDetailId(product.id)
-
         findNavController().navigate(action)
-
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupRecycler()
+    override fun onBind(binding: FragmentListBinding) {
+        setupRecycler(binding)
         observeState()
     }
 
-    private fun setupRecycler() {
+    private fun setupRecycler(binding: FragmentListBinding) {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
     }
 
     private fun observeState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                listViewModel.state.collect { state ->
-                    with(binding) {
-                        when (state) {
-                            is UiState.Loading -> {
-                                progressBar.isVisible = true
-                                recyclerView.isVisible = false
-                            }
+        viewModel.state.collectUiState(
+            onLoading = {
+                binding.progressBar.isVisible = true
+                binding.recyclerView.isVisible = false
+            },
+            onSuccess = { data ->
+                binding.progressBar.isVisible = false
+                binding.recyclerView.isVisible = true
+            },
+            onError = { message ->
+                binding.progressBar.isVisible = false
 
-                            is UiState.Success -> {
-                                progressBar.isVisible = false
-                                recyclerView.isVisible = true
-                                adapter.submitList(state.data)
-                            }
-
-                            is UiState.Error -> {
-                                progressBar.isVisible = false
-                                recyclerView.isVisible = false
-                                Toast.makeText(requireContext(), state.messege, Toast.LENGTH_LONG)
-                                    .show()
-                            }
-                        }
-
-                    }
-                }
             }
-        }
+        )   }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        _binding = null
-    }
-
-}
