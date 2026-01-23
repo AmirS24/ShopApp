@@ -1,5 +1,6 @@
 package com.vacral.shopapp.ui.di
 
+import com.shabelnikd.shopapp.ui.fragments.cart.CartViewModel
 import com.vacral.shopapp.ui.fragments.product.ListViewModel
 import com.vacral.shopapp.ui.fragments.product.detail.DetailViewModel
 import org.koin.core.module.dsl.viewModel
@@ -8,6 +9,7 @@ import org.koin.dsl.module
 import org.koin.viewmodel.scope.viewModelScope
 
 val uiModule = module {
-    viewModel { ListViewModel(get()) }
+    viewModelOf(::ListViewModel)
     viewModelOf(::DetailViewModel)
+    viewModelOf(::CartViewModel)
 }

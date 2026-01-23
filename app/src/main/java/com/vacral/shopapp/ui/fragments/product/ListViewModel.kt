@@ -1,9 +1,10 @@
 package com.vacral.shopapp.ui.fragments.product
 
-import android.view.ViewManager
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vacral.shopapp.domain.models.Product
+import com.vacral.shopapp.domain.usecase.AddToCartUseCase
 import com.vacral.shopapp.domain.usecase.GetProductUseCase
 import com.vacral.shopapp.ui.models.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,9 +13,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ListViewModel(
-    private val getProductUseCase: GetProductUseCase
+    private val getProductUseCase: GetProductUseCase,
+    private val addToCartUseCase: AddToCartUseCase
 ) : ViewModel() {
-
     private val _state = MutableStateFlow<UiState<List<Product>>>(UiState.Loading)
     val state: StateFlow<UiState<List<Product>>> = _state.asStateFlow()
 
@@ -34,4 +35,9 @@ class ListViewModel(
         }
     }
 
+    fun addToCart(product: Product) {
+        viewModelScope.launch {
+            addToCartUseCase(product)
+        }
+    }
 }
