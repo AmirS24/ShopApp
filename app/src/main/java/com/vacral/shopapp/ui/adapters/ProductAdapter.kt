@@ -1,10 +1,7 @@
 package com.vacral.shopapp.ui.adapters
 
-import android.provider.Telephony
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +9,7 @@ import coil3.load
 import coil3.request.crossfade
 import com.vacral.shopapp.databinding.ItemProductBinding
 import com.vacral.shopapp.domain.models.Product
-import java.text.FieldPosition
+
 
 class ProductAdapter(
     private val onClick: (Product) -> Unit
@@ -46,10 +43,9 @@ class ProductAdapter(
         val item = getItem(position)
         with(holder.binding){
             tvTitle.text = item.title
-            tvDesc.text = item.description
             tvPrice.text = "${item.price} $"
 
-            ivProduct.load(item.image){
+            imgProduct.load(item.image){
                 crossfade(true)
             }
             root.setOnClickListener {

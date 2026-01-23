@@ -26,20 +26,21 @@ class ProductListFragment : BaseFragment<FragmentListBinding, ListViewModel>(
     FragmentListBinding::inflate
 ) {
 
-    override val viewModel : ListViewModel by viewModel()
+    override val viewModel: ListViewModel by viewModel()
 
     private val adapter = ProductAdapter { product ->
-        val action = ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment()
+        val action =
+            ProductListFragmentDirections.actionProductListFragmentToProductDetailFragment()
                 .setProductDetailId(product.id)
         findNavController().navigate(action)
     }
 
     override fun onBind(binding: FragmentListBinding) {
-        setupRecycler(binding)
+        setupRecycler()
         observeState()
     }
 
-    private fun setupRecycler(binding: FragmentListBinding) {
+    private fun setupRecycler() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
     }
@@ -53,10 +54,12 @@ class ProductListFragment : BaseFragment<FragmentListBinding, ListViewModel>(
             onSuccess = { data ->
                 binding.progressBar.isVisible = false
                 binding.recyclerView.isVisible = true
+                adapter.submitList(data)
             },
             onError = { message ->
                 binding.progressBar.isVisible = false
-
+                binding.recyclerView.isVisible = false
             }
-        )   }
+        )
     }
+}
